@@ -102,7 +102,7 @@ struct palindromic_tree{
     if(!state[cur].next[c]){
       int now=state.size();
       state.push_back(state[cur].len+2);
-      state[now].fail=state[get_fail(state[cur].fail)].next[c];
+      state[now].fail = state[get_fail(state[cur].fail)].next[c];
       state[cur].next[c]=now;
       state[now].num=state[state[now].fail].num+1;
     }

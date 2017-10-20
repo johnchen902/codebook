@@ -11,7 +11,7 @@ class StoerWagner {
 		// --8<-- include only if cut is explicitly needed
 			DisjointSet djs;
 		vector<int> cut;
-		//--8<--------------------------------------------
+		//--8<----------
 			StoerWagner(int _n):n(_n),mc(inf),djs(_n) {
 				for(int i=0;i<n;i++)
 					merged[i]=0;
@@ -34,7 +34,7 @@ class StoerWagner {
 				append(v,i,cost[u][i]);
 			// --8<-- include only if cut is explicitly needed
 				djs.merge(v,u);
-			//--8<--------------------------------------------
+			//--8<----------
 		}
 		void phase() {
 			priority_queue<pii> pq;
@@ -64,12 +64,11 @@ class StoerWagner {
 			}
 			if(s<mc) {
 				mc=s;
-				// --8<-- include only if cut is explicitly
-				needed ------
+				// --8<-- include only if cut is explicitly needed ------
 					cut.clear();
 				for(int i=0;i<n;i++)
 					if(djs.getrep(i)==djs.getrep(v)) cut.PB(i);
-				//--8<----------------------------------------
+				//--8<----------
 			}
 			merge(v,pv);
 		}
@@ -81,11 +80,10 @@ class StoerWagner {
 			return mc;
 		}
 		// --8<-- include only if cut is explicitly needed
-		------
 			vector<int> getcut() { // return one side of the cut
 				mincut();
 				return cut;
 			}
-		//--8<--------------------------------------------
+		//--8<----------
 };
 // }}}

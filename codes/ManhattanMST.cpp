@@ -50,7 +50,8 @@ void calc() {
   sort(p,p+n,cpx);
   REP(i,n) {
     j=Q(1,p[i].z,cnt);
-    if(j!=-1)e[m++]=(E){p[i].id,p[j].id,dis(p[i],p[j])};
+    if (j != -1)
+      e[m++] = (E){p[i].id, p[j].id, dis(p[i], p[j])};
     ins(1,i);
   }
 }
