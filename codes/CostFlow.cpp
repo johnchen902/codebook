@@ -15,14 +15,14 @@ struct CostFlow {
 		fl = cost = 0;
 	}
 	void add_edge(int u, int v, long long f, long long c) {
-		E[u].PB({v, SZ(E[v])  , f,  c});
-		E[v].PB({u, SZ(E[u])-1, 0, -c});
+		E[u].PB({v, SZ(E[v]), f, c});
+		E[v].PB({u, SZ(E[u]) - 1, 0, -c});
 	}
 	pll flow() {
 		while (true) {
 			for (int i=0; i<n; i++) {
 				dis[i] = INF;
-        inq[i] = 0;
+				inq[i] = 0;
 			}
 			dis[s] = 0;
 			queue<int> que;

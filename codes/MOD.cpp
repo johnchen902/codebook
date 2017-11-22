@@ -7,19 +7,19 @@ int _fd(int a,int b){ return a<0?(-~a/b-1):a/b; }
 int _rd(int a,int m){ return a-_fd(a,m)*m; }
 int _pv(int a,int m,int r)
 {
-    r=(r%m+m)%m;
-    return _fd(a-r,m)*m+r;
+	r=(r%m+m)%m;
+	return _fd(a-r,m)*m+r;
 }
 int _nt(int a,int m,int r)
 {
-    m=abs(m);
-    r=(r%m+m)%m;
-    return _fd(a-r-1,m)*m+r+m;
+	m=abs(m);
+	r=(r%m+m)%m;
+	return _fd(a-r-1,m)*m+r+m;
 }
 int _ct(int a,int b,int m,int r)
 {
-    m=abs(m);
-    a=_nt(a,m,r);
-    b=_pv(b,m,r);
-    return (a>b)?0:((b-a+m)/m);
+	m=abs(m);
+	a=_nt(a,m,r);
+	b=_pv(b,m,r);
+	return (a>b)?0:((b-a+m)/m);
 }

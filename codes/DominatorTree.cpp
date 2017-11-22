@@ -1,5 +1,5 @@
 // idom[n] is the unique node that strictly dominates n but does
-// not strictly dominate any other node that strictly dominates n. 
+// not strictly dominate any other node that strictly dominates n.
 // idom[n] = 0 if n is entry or the entry cannot reach n.
 struct DominatorTree{
   static const int MAXN = 200010;

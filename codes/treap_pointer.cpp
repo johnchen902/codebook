@@ -5,7 +5,7 @@ struct Treap {
   char val;
   int size;
   Treap () : l(&nil), r(&nil), size(0) {}
-  Treap (char _val) : 
+  Treap (char _val) :
     l(&nil), r(&nil), val(_val), size(1) {}
 } Treap::nil, Treap::mem[MEM], *Treap::pmem = Treap::mem;
 int size(const Treap *t) { return t->size; }

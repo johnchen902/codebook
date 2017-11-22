@@ -4,7 +4,7 @@ struct Mcc{
   int n;
   pdd p[MAXN],cen;
   double r2;
-  
+
   void init(int _n, pdd _p[]){
     n = _n;
     memcpy(p,_p,sizeof(pdd)*n);
