@@ -21,7 +21,6 @@ struct Mcc{
     double y = p0.y + (a.x * c2 - b.x * c1) / d;
     return pdd(x,y);
   }
-
   pair<pdd,double> solve(){
     random_shuffle(p,p+n);
     r2=0;

@@ -1,11 +1,9 @@
 struct Graph {
   // Minimum General Weighted Matching (Perfect Match) 0-base
   static const int MXN = 105;
-
   int n, edge[MXN][MXN];
   int match[MXN],dis[MXN],onstk[MXN];
   vector<int> stk;
-
   void init(int _n) {
     n = _n;
     for (int i=0; i<n; i++)
@@ -36,7 +34,6 @@ struct Graph {
     stk.pop_back();
     return false;
   }
-
   int solve() {
     // find a match
     for (int i=0; i<n; i+=2){
@@ -68,4 +65,3 @@ struct Graph {
     return ret;
   }
 }graph;
-

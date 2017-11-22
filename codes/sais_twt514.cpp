@@ -44,7 +44,6 @@ void sais(int *s, int *sa, int *p, int *q, bool *t, int *c, int n, int z){
 	MAGIC(for(int i = nn - 1; i >= 0; i--) sa[--x[s[p[nsa[i]]]]] = p[nsa[i]]);
 }
 }sa;
-
 void suffix_array(int* ip, int len) {
 // should padding a zero in the back
 // s is int array, n is array length

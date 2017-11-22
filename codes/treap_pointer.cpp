@@ -8,7 +8,6 @@ struct Treap {
   Treap (char _val) : 
     l(&nil), r(&nil), val(_val), size(1) {}
 } Treap::nil, Treap::mem[MEM], *Treap::pmem = Treap::mem;
-
 int size(const Treap *t) { return t->size; }
 void pull(Treap *t) {
   if (!size(t)) return;
@@ -40,17 +39,14 @@ void split(Treap *t, int k, Treap *&a, Treap *&b) {
     pull(b);
   }
 }
-
 int nv;
 Treap *rt[50005];
-
 void print(const Treap *t) {
   if (!size(t)) return;
   print(t->l);
   cout << t->val;
   print(t->r);
 }
-
 int main(int argc, char** argv) {
   IOS;
   rt[nv=0] = &Treap::nil;

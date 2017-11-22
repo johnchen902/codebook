@@ -54,4 +54,3 @@ double karp_mmc() {
   edgeID.resize(SZ(cycle));
   return mmc;
 }
-

@@ -1,12 +1,10 @@
 Num mem[MAX_L * 20] , *pmem = mem;
-
 inline void add(Num *a , Num *b , Num *c , int na , int nb) {
     int n = max(na , nb);
     memset(c , 0 , sizeof(Num) * n);
     for(int i = 0; i < na; i++) c[i] = c[i] + a[i];
     for(int i = 0; i < nb; i++) c[i] = c[i] + b[i];
 }
-
 void mul(Num *a , Num *b , Num *c , int n) {
     int l = n * 2 - 1;
     memset(c , 0 , sizeof(Num) * l);

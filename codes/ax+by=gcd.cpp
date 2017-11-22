@@ -1,5 +1,4 @@
 typedef pair<int, int> pii;
-
 pii gcd(int a, int b){
 	if(b == 0) return make_pair(1, 0);
 	else{

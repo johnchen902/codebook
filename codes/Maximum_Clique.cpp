@@ -1,26 +1,22 @@
 class MaxClique {
 public:
     static const int MV = 210;
-
     int V;
     int el[MV][MV/30+1];
     int dp[MV];
     int ans;
     int s[MV][MV/30+1];
     vector<int> sol;
-
     void init(int v) {
         V = v; ans = 0;
         FZ(el); FZ(dp);
     }
-
     /* Zero Base */
     void addEdge(int u, int v) {
         if(u > v) swap(u, v);
         if(u == v) return;
         el[u][v/32] |= (1<<(v%32));
     }
-
     bool dfs(int v, int k) {
         int c = 0, d = 0;
         for(int i=0; i<(V+31)/32; i++) {
@@ -56,7 +52,6 @@ public:
         }
         return 0;
     }
-
     int solve() {
         for(int i=V-1; i>=0; i--) {
             dfs(i, 1);

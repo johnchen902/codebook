@@ -23,7 +23,6 @@ vector<Face> convex_hull_3D(const vector<Point> pt) {
   int n = SZ(pt);
   REP(i,n) REP(j,n)
     flag[i][j] = 0;
-
   vector<Face> now;
   now.push_back((Face){0,1,2});
   now.push_back((Face){2,1,0});

@@ -11,7 +11,6 @@ struct Edge {
         return a < rhs.a;
     }
 };
-
 Node *tr[maxn];
 vector<Edge> edges;
 void rev(Node *o) {

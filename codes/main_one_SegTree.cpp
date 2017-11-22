@@ -2,13 +2,10 @@
 // should call init after input N
 // getPathSeg return the segment in order u->v
 // fa[root] = root
-
 typedef pair<int,int> pii;
-
 int N,fa[MXN],belong[MXN],dep[MXN],sz[MXN],que[MXN];
 int step,line[MXN],stPt[MXN],edPt[MXN];
 vector<int> E[MXN], chain[MXN];
-
 void init() {
   REP(i,N) {
     E[i].clear();
@@ -97,4 +94,3 @@ int get_answer(int u, int v){
 		; // check answer with segment [it.F, it.S]
 	return ret;
 }
-

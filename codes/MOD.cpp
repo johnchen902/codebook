@@ -3,7 +3,6 @@
 /// _pv(a,m,r) largest x s.t x<=a && x%m == r.
 /// _nx(a,m,r) smallest x s.t x>=a && x%m == r.
 /// _ct(a,b,m,r) |A| , A = { x : a<=x<=b && x%m == r }.
-
 int _fd(int a,int b){ return a<0?(-~a/b-1):a/b; }
 int _rd(int a,int m){ return a-_fd(a,m)*m; }
 int _pv(int a,int m,int r)

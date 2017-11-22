@@ -1,7 +1,6 @@
 const int maxn = 111;
 const int maxm = 111;
 const double eps = 1E-10;
-
 double a[maxn][maxm], b[maxn], c[maxm], d[maxn][maxm];
 double x[maxm];
 int ix[maxn + maxm]; // !!! array all indexed from 0
@@ -63,4 +62,3 @@ double simplex(double a[maxn][maxm], double b[maxn], double c[maxm], int n, int 
     }
     return ans; 
 }
-

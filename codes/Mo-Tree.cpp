@@ -2,11 +2,9 @@
 using namespace std;
 #define IOS ios_base::sync_with_stdio(0); cin.tie(0);
 #define SZ(x) ((int)((x).size()))
-
 const int MX = 500005;
 const int SQ = 1400;
 const int LOG = 17;
-
 struct BIT {
   int bit[MX];
   int lb(int x) { return x & -x; }
@@ -22,19 +20,16 @@ struct BIT {
     return v;
   }
 }bit;
-
 struct Query {
   int l,r,qid;
 }qry[MX];
 struct Edge {
   int v,x;
 };
-
 int N,Q,timestamp[MX],ans[MX];
 int in[MX],cnt[MX];
 vector<Edge> E[MX];
 vector<Edge> seq;
-
 void DFS(int u, int f) {
   timestamp[u] = SZ(seq);
   for (auto it:E[u]) {
@@ -74,7 +69,6 @@ int main() {
   sort(qry+1,qry+1+Q, [](Query a, Query b) {
       return make_pair(a.l/SQ,a.r) < make_pair(b.l/SQ,b.r);
       });
-
   int curL = 1, curR = 0;
   for (int i=1; i<=Q; i++) {
     int ql=qry[i].l,qr=qry[i].r;
@@ -84,9 +78,6 @@ int main() {
     while (curR > qr) poke(curR--);
     ans[qry[i].qid] = bit.qry();
   }
-
   for (int i=1; i<=Q; i++) cout << ans[i] << "\n";
-
   return 0;
 }
-

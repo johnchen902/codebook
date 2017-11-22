@@ -66,7 +66,6 @@ struct GenMatch { // 1-base
 			bk[i] = 0;
 			djs[i] = i;
 		}
-
 		while(qe.size()) qe.pop();
 		qe.push(st);
 		inq[st] = 1;
@@ -114,7 +113,6 @@ struct GenMatch { // 1-base
 		return ans;
 	}
 }G;
-
 int main() {
 	G.init(V);
 	for(int i=0; i<E; i++) {
@@ -124,4 +122,3 @@ int main() {
 	}
 	cout << G.solve() << endl;
 }
-

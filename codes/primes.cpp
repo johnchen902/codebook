@@ -15,7 +15,6 @@ void sieve() {
     }
   }
 }
-
 vector<int> factor(int x) {
   vector<int> fac{1};
   while (x > 1) {

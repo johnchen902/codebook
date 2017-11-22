@@ -1,7 +1,6 @@
 Mat pinv(Mat m)
 {
   Mat res = I;
-
   FZ(used);
   for(int i=0; i<W; i++)
   {
@@ -20,14 +19,12 @@ Mat pinv(Mat m)
     used[i] = true;
     swap(m.v[piv], m.v[i]);
     swap(res.v[piv], res.v[i]);
-
     ld rat = m.v[i][i];
     for(int j=0; j<W; j++)
     {
       m.v[i][j] /= rat;
       res.v[i][j] /= rat;
     }
-
     for(int j=0; j<W; j++)
     {
       if(j == i) continue;
@@ -39,13 +36,11 @@ Mat pinv(Mat m)
       }
     }
   }
-
   for(int i=0; i<W; i++)
   {
     if(used[i]) continue;
     for(int j=0; j<W; j++)
       res.v[i][j] = 0;
   }
-
   return res;
 }

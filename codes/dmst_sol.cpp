@@ -1,5 +1,4 @@
 const int INF = 1029384756;
-
 struct edge_t{
   int u,v,w;
   set< pair<int,int> > add, sub;
@@ -36,7 +35,6 @@ struct edge_t{
 int N,M;
 int cid,incyc[MXN],contracted[MXN];
 vector<int> E[MXN];
-
 edge_t dmst(int rt){
   edge_t cost;
   for (int i=0; i<N; i++){
@@ -83,7 +81,6 @@ edge_t dmst(int rt){
   }
   return cost;
 }
-
 void solve(){
   edge_t cost = dmst(0);
   for (auto it : cost.add){ // find a solution

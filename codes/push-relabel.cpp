@@ -8,7 +8,6 @@ int max_flow(int s, int t, int n) {
   fill_n(h, n, 0);
   fill_n(e, n, 0);
   fill_n(g, 2 * n + 1, 0);
-
   for (int i = 0; i < n; i++) {
     f[s][i] = e[i] = c[s][i];
     f[i][s] = -c[s][i];
@@ -17,7 +16,6 @@ int max_flow(int s, int t, int n) {
   e[s]++, e[t]++;
   g[0] = n - 1;
   g[n] = 1;
-
   list<int> fifo;
   for (int i = 0; i < n; i++)
     if (i != s && i != t && e[i])
