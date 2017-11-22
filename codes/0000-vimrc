@@ -4,6 +4,6 @@ filet plugin indent on
 no <F4> :vs input.txt<CR>
 no <F5> :!./a.out<CR>
 no <F6> :!./a.out < input.txt<CR>
-no <F9> :g++ % -std=c++17 -O2 -g -fsanitize=undefined -Wall -Wextra -Wshadow -Wno-unused-result<CR>
+no <F9> :!g++ -static -O2 -std=gnu++14 -lm % -g -fsanitize=undefined -Wall -Wextra -Wshadow -Wno-unused-result<CR>
 no <expr> <silent> <Home> col('.') == match(getline('.'),'\S') + 1 ? '0' : '^'
 im <silent> <Home> <C-O><Home>

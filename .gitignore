@@ -2,3 +2,4 @@ pdf/*.aux
 pdf/*.log
 pdf/*.synctex.gz
 pdf/*.toc
+pdf/*.out
