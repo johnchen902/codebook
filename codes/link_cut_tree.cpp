@@ -1,131 +1,155 @@
-const int MXN = 100005;
-const int MEM = 100005;
-
-struct Splay {
-  static Splay nil, mem[MEM], *pmem;
-  Splay *ch[2], *f;
-  int val, rev, size;
-  Splay () : val(-1), rev(0), size(0) {
-    f = ch[0] = ch[1] = &nil;
-  }
-  Splay (int _val) : val(_val), rev(0), size(1) {
-    f = ch[0] = ch[1] = &nil;
-  }
-  bool isr() {
-    return f->ch[0] != this && f->ch[1] != this;
-  }
-  int dir() {
-    return f->ch[0] == this ? 0 : 1;
-  }
-  void setCh(Splay *c, int d) {
-    ch[d] = c;
-    if (c != &nil) c->f = this;
-    pull();
-  }
-  void push() {
-    if (rev) {
-      swap(ch[0], ch[1]);
-      if (ch[0] != &nil) ch[0]->rev ^= 1;
-      if (ch[1] != &nil) ch[1]->rev ^= 1;
-      rev=0;
+const int INF = 0x3f3f3f3f;
+const int MAX_N = 200000 + 10;
+struct Node {
+    Node *par , *ch[2] , *mx;
+    int id , sz , rev_tag , val;
+    Node(int _id = 0 , int _val = 0) : par(0) , id(_id) , sz(1) , rev_tag(0) , mx(this) , val(_val) {
+        MS(ch , 0);
     }
-  }
-  void pull() {
-    size = ch[0]->size + ch[1]->size + 1;
-    if (ch[0] != &nil) ch[0]->f = this;
-    if (ch[1] != &nil) ch[1]->f = this;
-  }
-} Splay::nil, Splay::mem[MEM], *Splay::pmem = Splay::mem;
-Splay *nil = &Splay::nil;
-
-void rotate(Splay *x) {
-  Splay *p = x->f;
-  int d = x->dir();
-  if (!p->isr()) p->f->setCh(x, p->dir());
-  else x->f = p->f;
-	p->setCh(x->ch[!d], d);
-  x->setCh(p, !d);
-	p->pull(); x->pull();
-}
-
-vector<Splay*> splayVec;
-void splay(Splay *x) {
-  splayVec.clear();
-  for (Splay *q=x;; q=q->f) {
-    splayVec.push_back(q);
-    if (q->isr()) break;
-  }
-  reverse(begin(splayVec), end(splayVec));
-  for (auto it : splayVec) it->push();
-  while (!x->isr()) {
-    if (x->f->isr()) rotate(x);
-    else if (x->dir()==x->f->dir()) rotate(x->f),rotate(x);
-    else rotate(x),rotate(x);
-  }
-}
-
-Splay* access(Splay *x) {
-  Splay *q = nil;
-  for (;x!=nil;x=x->f) {
-    splay(x);
-    x->setCh(q, 1);
-    q = x;
-  }
-  return q;
-}
-void evert(Splay *x) {
-  access(x);
-  splay(x);
-  x->rev ^= 1;
-  x->push(); x->pull();
-}
-void link(Splay *x, Splay *y) {
-//  evert(x);
-  access(x);
-  splay(x);
-  evert(y);
-  x->setCh(y, 1);
-}
-void cut(Splay *x, Splay *y) {
-//  evert(x);
-  access(y);
-  splay(y);
-  y->push();
-  y->ch[0] = y->ch[0]->f = nil;
-}
-
-int N, Q;
-Splay *vt[MXN];
-
-int ask(Splay *x, Splay *y) {
-  access(x);
-  access(y);
-  splay(x);
-  int res = x->f->val;
-  if (res == -1) res=x->val;
-  return res;
-}
-int main(int argc, char** argv) {
-  scanf("%d%d", &N, &Q);
-  for (int i=1; i<=N; i++)
-    vt[i] = new (Splay::pmem++) Splay(i);
-  while (Q--) {
-    char cmd[105];
-    int u, v;
-    scanf("%s", cmd);
-    if (cmd[1] == 'i') {
-      scanf("%d%d", &u, &v);
-      link(vt[v], vt[u]);
-    } else if (cmd[0] == 'c') {
-      scanf("%d", &v);
-      cut(vt[1], vt[v]);
-    } else {
-      scanf("%d%d", &u, &v);
-      int res=ask(vt[u], vt[v]);
-      printf("%d\n", res);
+};
+struct Edge {
+    int x , y , a , b;
+    Edge() {}
+    Edge(int _x , int _y , int _a , int _b) : x(_x) , y(_y) , a(_a) , b(_b) {}
+    bool operator < (const Edge &rhs) const {
+        return a < rhs.a;
     }
-  }
-
-  return 0;
+};
+int N , M;
+Node *tr[MAX_N];
+vector<Edge> edges;
+inline void rev(Node *o) {
+    swap(o->ch[0] , o->ch[1]);
+    o->rev_tag ^= 1;
 }
-
+inline int sz(Node *o) {
+    return o ? o->sz : 0;
+}
+inline void push(Node *o) {
+    if(o->rev_tag) {
+        REP(i , 2) if(o->ch[i]) rev(o->ch[i]);
+        o->rev_tag ^= 1;
+    }
+}
+inline void pull(Node *o) {
+    o->sz = sz(o->ch[0]) + 1 + sz(o->ch[1]);
+    o->mx = o;
+    REP(i , 2) if(o->ch[i] && o->ch[i]->mx->val > o->mx->val) o->mx = o->ch[i]->mx;
+}
+inline int get_ch_id(Node *p , Node *o) {
+    REP(i , 2) if(p->ch[i] == o) return i;
+    return -1;
+}
+inline void rotate(Node *o , int d) {
+    push(o);
+    push(o->ch[d]);
+    Node *u = o;
+    o = o->ch[d];
+    Node *p = u->par;
+    int t;
+    if(p && (t = get_ch_id(p , u)) != -1) p->ch[t] = o;
+    o->par = p;
+    u->par = o;
+    if(o->ch[d^1]) o->ch[d^1]->par = u;
+    u->ch[d] = o->ch[d^1];
+    o->ch[d^1] = u;
+    pull(u);
+    pull(o);
+}
+inline void rotate(Node *o) {
+    if(sz(o->ch[0]) > sz(o->ch[1])) rotate(o , 0);
+    else if(sz(o->ch[0]) < sz(o->ch[1])) rotate(o , 1);
+}
+inline void all_push(Node *o) {
+    if(o->par && get_ch_id(o->par , o) != -1) all_push(o->par);
+    push(o);
+}
+inline void splay(Node *o) {
+    all_push(o);
+    Node *p;
+    for(int d; (p = o->par) && (d = get_ch_id(p , o)) != -1;) {
+        rotate(p , d);
+        rotate(p);
+    }
+}
+inline Node* access(Node *o) {
+    Node *last = 0;
+    while(o) {
+        splay(o);
+        o->ch[1] = last;
+        pull(o);
+        last = o;
+        o = o->par;
+    }
+    return last;
+}
+inline void make_root(Node *o) {
+    rev(access(o));
+    splay(o);
+}
+inline void link(Node *a , Node *b) {
+    make_root(b);
+    b->par = a;
+}
+inline void cut(Node *a , Node *b) {
+    make_root(a);
+    access(b);
+    splay(b);
+    b->ch[0] = 0;
+    a->par = 0;
+    pull(b);
+}
+inline Node* find_root(Node *o) {
+    o = access(o);
+    while(o->ch[0]) o = o->ch[0];
+    splay(o);
+    return o;
+}
+inline void add_edge(int i , int x , int y , int v) {
+    tr[N + i] = new Node(N + i , v);
+    if(find_root(tr[x]) == find_root(tr[y])) {
+        make_root(tr[x]);
+        access(tr[y]);
+        splay(tr[x]);
+        int id = tr[x]->mx->id - N;
+        if(edges[id].b > v) {
+            cut(tr[edges[id].x] , tr[N + id]);
+            cut(tr[edges[id].y] , tr[N + id]);
+            link(tr[x] , tr[N + i]);
+            link(tr[y] , tr[N + i]);
+        }
+    }
+    else {
+        link(tr[x] , tr[N + i]);
+        link(tr[y] , tr[N + i]);
+    }
+}
+int main() {
+    RI(N , M);
+    edges.clear();
+    REP(i , N) tr[i] = new Node(i);
+    REP(i , M) {
+        int x , y , a , b;
+        RI(x , y , a , b);
+        x-- , y--;
+        if(x == y) continue;
+        edges.PB(Edge(x , y , a , b));
+    }
+    sort(ALL(edges));
+    M = SZ(edges);
+    int ans = INF;
+    for(int a = 1 , ptr = 0; a <= 50000; a++) {
+        while(ptr < SZ(edges) && edges[ptr].a <= a) {
+            add_edge(ptr , edges[ptr].x , edges[ptr].y , edges[ptr].b);
+            ptr++;
+        }
+        if(find_root(tr[0]) == find_root(tr[N - 1])) {
+            make_root(tr[0]);
+            access(tr[N - 1]);
+            splay(tr[0]);
+            ans = min(ans , a + tr[0]->mx->val);
+        }
+    }
+    PL(ans == INF ? -1 : ans);
+    return 0;
+}

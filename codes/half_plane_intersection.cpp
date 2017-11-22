@@ -1,76 +1,126 @@
-const double EPS = 1e-9;
-
-pdd interPnt(Line l1, Line l2, bool &res){
-    pdd p1, p2, q1, q2;
-    tie(p1, p2) = l1;
-    tie(q1, q2) = l2;
-	double f1 = cross(p2, q1, p1);
-    double f2 = -cross(p2, q2, p1);
-	double f = (f1 + f2);
-
-    if(fabs(f) < EPS) {
-        res = false;
-        return {0, 0};
-    }
-
-    res = true;
-	return (f2 / f) * q1 + (f1 / f) * q2;
+/// {{{ Author: Wang, Yen-Jen
+#include <bits/stdc++.h>
+ 
+using namespace std;
+ 
+// type
+typedef long long ll;
+typedef pair<int,int> pii;
+ 
+// macro
+#define F first
+#define S second
+#define SZ(x) ((int)(x).size())
+#define ALL(x) (x).begin() , (x).end()
+#define PB push_back
+#define MP make_pair
+#define REP(i , n) for(int i = 0; i < int(n); i++)
+#define REP1(i , a , b) for(int i = (a); i <= int(b); i++)
+#define PER(i , n) for(int i = (n) - 1; i >= 0; i--)
+#define PER1(i , a , b) for(int i = (a); i >= int(b); i--)
+#define LC o<<1 , l , m
+#define RC o<<1|1 , m + 1 , r
+#define MS(x , v) memset(x , (v) , sizeof(x))
+ 
+// constant number
+const int INF = 0x3f3f3f3f;
+const ll INF64 = 0x3f3f3f3f3f3f3f3fll;
+ 
+// random function
+inline int RAND() {
+    static int x = 880301;
+    return x = (x * 0xdefacedll + 1ll) % 0x7fffffffll;
 }
-
-bool isin(Line l0, Line l1, Line l2) {
-    // Check inter(l1, l2) in l0
-    bool res;
-    pdd p = interPnt(l1, l2, res);
-    return cross(l0.S, p, l0.F) > EPS;
+/// }}}
+ 
+const double EPS = 1e-10;
+ 
+struct Point {
+    double x , y;
+ 
+    Point(double _x = 0.0 , double _y = 0.0) : x(_x) , y(_y) {}
+ 
+    bool operator < (const Point &rhs) const {
+        if(x != rhs.x) return x < rhs.x;
+        else return y < rhs.y;
+    }
+};
+ 
+typedef Point Vector;
+ 
+inline Point operator + (Point p , Vector v) {
+    return Point(p.x + v.x , p.y + v.y);
 }
-
-/* If no solution, check: 1. ret.size() < 3
- * Or more precisely, 2. interPnt(ret[0], ret[1])
- * in all the lines. (use (l.S - l.F).cross(p - l.F) > 0
- */
-vector<Line> halfPlaneInter(vector<Line> lines) {
-    int sz = lines.size();
-    vector<double> ata(sz), ord(sz);
-    for (int i=0; i<sz; i++) {
-        ord[i] = i;
-        pdd d = lines[i].S - lines[i].F;
-        ata[i] = atan2(d.y, d.x);
+ 
+inline Vector operator - (Point a , Point b) {
+    return Vector(a.x - b.x , a.y - b.y);
+}
+ 
+inline Vector operator * (Vector v , double p) {
+    return Vector(v.x * p , v.y * p);
+}
+ 
+inline Vector operator / (Vector v , double p) {
+    return Vector(v.x / p , v.y / p);
+}
+ 
+inline double cross(Vector a , Vector b) {
+    return a.x * b.y - a.y * b.x;
+}
+ 
+inline double dot(Vector a , Vector b) {
+    return a.x * b.x + a.y * b.y;
+}
+ 
+inline int dcmp(double x) {
+    return fabs(x) < EPS ? 0 : x > 0 ? 1 : -1;
+}
+ 
+struct Line {
+    Point p;
+    Vector v;
+    double ang;
+ 
+    Line() {}
+    Line(Point _p , Vector _v) : p(_p) , v(_v) {
+        ang = atan2(_v.y , _v.x);
     }
-    sort(ALL(ord), [&](int i, int j) {
-        if (abs(ata[i] - ata[j]) < EPS) {
-            return cross(lines[i].S, lines[j].S, lines[i].F) < 0;
+ 
+    bool operator < (const Line &rhs) const {
+        return ang < rhs.ang;
+    }
+};
+ 
+inline bool on_left(Line l , Point p) {
+    return cross(l.v , p - l.p) > 0;
+}
+ 
+inline Point get_line_intersection(Line a , Line b) {
+    Vector u = a.p - b.p;
+    double t = cross(b.v , u) / cross(a.v , b.v);
+    return a.p + a.v * t;
+}
+ 
+vector<Point> half_plane_intersection(vector<Line> ls) {
+    int n = SZ(ls);
+    sort(ALL(ls));
+    int f , r;
+    vector<Point> p(n) , ans;
+    vector<Line> q(n);
+    q[f = r = 0] = ls[0];
+    REP1(i , 1 , n - 1) {
+        while(f < r && !on_left(ls[i] , p[r - 1])) r--;
+        while(f < r && !on_left(ls[i] , p[f])) f++;
+        q[++r] = ls[i];
+        if(dcmp(cross(q[r].v , q[r - 1].v)) == 0) {
+            r--;
+            if(on_left(q[r] , ls[i].p)) q[r] = ls[i];
         }
-        return ata[i] < ata[j];
-    });
-    vector<Line> fin;
-    for (int i=0; i<sz; i++) {
-        if (!i or fabs(ata[ord[i]] - ata[ord[i-1]]) > EPS) {
-            fin.PB(lines[ord[i]]);
-        }
+        if(f < r) p[r - 1] = get_line_intersection(q[r - 1] , q[r]);
     }
-    
-    deque<Line> dq;
-    for (int i=0; i<SZ(fin); i++) {
-        while(SZ(dq) >= 2 and 
-              not isin(fin[i], dq[SZ(dq)-2], dq[SZ(dq)-1])) {
-            dq.pop_back();
-        }
-        while(SZ(dq) >= 2 and 
-              not isin(fin[i], dq[0], dq[1])) {
-            dq.pop_front();
-        }
-        dq.push_back(fin[i]);
-    }
-
-    while (SZ(dq) >= 3 and
-           not isin(dq[0], dq[SZ(dq)-2], dq[SZ(dq)-1])) {
-        dq.pop_back();
-    }
-
-    while (SZ(dq) >= 3 and
-           not isin(dq[SZ(dq)-1], dq[0], dq[1])) {
-        dq.pop_front();
-    }
-    vector<Line> res(ALL(dq));
-    return res;
+    while(f < r && !on_left(q[f] , p[r - 1])) r--;
+    if(r - f <= 1) return ans;
+    p[r] = get_line_intersection(q[r] , q[f]);
+    REP1(i , f , r) ans.PB(p[i]);
+    return ans;
 }
